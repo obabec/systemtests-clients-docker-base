@@ -19,6 +19,7 @@ def set_args():
     parser.add_argument('action', metavar='N', type=str)
 
 
+sys.tracebacklimit = 0
 parser = argparse.ArgumentParser(description='Process stomp connection arguments.')
 set_args()
 args = parser.parse_args()
