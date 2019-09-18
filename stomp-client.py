@@ -70,7 +70,7 @@ def send():
 def recv():
     logging.info('Ready to receive ' + str(args.count) + ' messages')
     conn.subscribe(destination=args.address, id=1, ack='auto',
-                   headers={'subscription-type': args.dest_type, 'durable-subscription-name': 'pepa'})
+                   headers={'subscription-type': args.dest_type})
     if wait_until_message_received(args.timeout):
         logging.info('Received all ' + str(received["recv"]) + ' messages')
     else:
