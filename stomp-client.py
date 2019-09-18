@@ -35,6 +35,7 @@ class MyListener(stomp.ConnectionListener):
 
     def on_error(self, headers, message):
         logging.error('Received an error "%s"' % message)
+        exit(1)
 
     def on_message(self, headers, message):
         print('%s' % json.dumps({'message': message}))
