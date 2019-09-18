@@ -15,6 +15,7 @@ def set_args():
     parser.add_argument('--timeout', type=int, help='Set timeout for subscriber.')
     parser.add_argument('--count', type=int, help='Count of messages which are going to be send.')
     parser.add_argument('--msg-content', type=str, help='Message content.')
+    parser.add_argument('--dest-type', type=str, help='Destination type (ANYCAST / MULTICAST).')
     parser.add_argument('action', metavar='N', type=str)
 
 
@@ -60,7 +61,7 @@ def wait_until_message_received(timeout, period=0.25):
 def send():
     logging.info('Ready to send ' + str(args.count) + ' messages')
     for x in range(args.count):
-        conn.send(body=args.msg_content, destination=args.address, headers={'destination-type': 'ANYCAST'})
+        conn.send(body=args.msg_content, destination=args.address, headers={'destination-type': args.dest_type})
         print(json.dumps({'Message': args.msg_content}))
         time.sleep(1)
     conn.disconnect()
@@ -68,7 +69,8 @@ def send():
 
 def recv():
     logging.info('Ready to receive ' + str(args.count) + ' messages')
-    conn.subscribe(destination=args.address, id=1, ack='auto', headers={'subscription-type': 'ANYCAST','durable-subscription-name':'pepa'})
+    conn.subscribe(destination=args.address, id=1, ack='auto',
+                   headers={'subscription-type': args.dest_type, 'durable-subscription-name': 'pepa'})
     if wait_until_message_received(args.timeout):
         logging.info('Received all ' + str(received["recv"]) + ' messages')
     else:
